@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <meta charset=utf-8>
+  <title>10-component-lifecycle</title>
+  <head>
+    <script src="../static/node_modules/react/dist/react.js"></script>
+    <script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+    var MessageBox = React.createClass({
+      /*执行顺序：
+        getDefaultProps
+        getInitialState
+        componentWillMount
+        渲染
+        componentDidMount
+        ok
+
+        (killMe)componentWillUnmount
+      */
+      getInitialState:function(){
+        console.log("getInitialState");
+        return {
+          titleMessage:'hello(state)',
+          count : 0,
+        }
+      },
+
+      componentWillMount:function(){
+        console.log("conponentWillMount");
+
+        var self = this;
+        this.timer = setInterval(function(){
+          self.setState({
+            count : self.state.count + 1,
+          })
+        },1000);
+
+        //防止第二次渲染
+        this.setState({
+          titleMessage : "timer",
+        });
+      },
+
+      componentDidMount:function(){
+        console.log("componentDidMoune");
+
+        //页面组件渲染完成
+        //console.log(this.getDOMNode());
+        //合适做ajax操作
+      },
+
+      componentWillUnmount:function(){
+        console.log("componentWillUnmount");
+        
+        //清除计数器，否则会内存泄露
+        clearInterval(this.timer);
+      },
+
+      getDefaultProps:function(){
+        console.log("getDefaultProps");
+        return {};
+      },
+      
+      killMe:function(){
+        React.unmountComponentAtNode( document.getElementById("example") );
+      },
+
+      render:function(){
+        console.log("渲染");
+        return (
+          <div>
+            <h1>{this.state.titleMessage} 计数：{this.state.count}</h1>
+            <button onClick={this.killMe}>卸载此组件</button>
+            <SubMessage/>
+          </div>
+        );
+      }
+    });
+
+    var SubMessage = React.createClass({
+      render:function(){
+        return (<h2>world</h2>);
+      }
+    });
+
+    var messageBox = React.render(
+      <MessageBox/>,
+      document.getElementById('example'),
+      function(){
+        console.log('ok');
+      }
+    );
+
+
+    </script>
+  </body>
+</html>

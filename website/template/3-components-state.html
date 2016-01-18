@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <meta charset=utf-8>
+  <title>3-component-state</title>
+  <head>
+    <script src="../static/node_modules/react/dist/react.js"></script>
+    <script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+    var MessageBox = React.createClass({
+      getInitialState:function(){
+        return {
+          isVisible:true,
+          titleMessage:'hello(state)',
+        }
+      },
+      
+      render:function(){
+
+        var styleObj = {
+          display: this.state.isVisible ? 'block' : 'none',
+        }
+        return (
+          <div>
+            <h1 style={styleObj}>{this.state.titleMessage}</h1>
+            <SubMessage/>
+          </div>
+        );
+      }
+    });
+
+    var SubMessage = React.createClass({
+      render:function(){
+        return (<h2>world</h2>);
+      }
+    });
+
+    var messageBox = React.render(
+      <MessageBox/>,
+      document.getElementById('example'),
+      function(){
+        console.log('ok');
+      }
+    );
+
+    </script>
+  </body>
+</html>

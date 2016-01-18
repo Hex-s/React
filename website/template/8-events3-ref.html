@@ -1,0 +1,145 @@
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>8-events3-ref</title>
+		<script src="../static/node_modules/react/dist/react.js"></script>
+    	<script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  	</head>
+
+	</head>
+	<body>
+		<div id="app"></div>
+		<script type="text/jsx">
+
+			var FormAction = React.createClass({
+
+				getInitialState:function(){
+					return {
+						inputValue : 'default value',
+						selectValue : 'A',
+						radioValue : 'RA',
+						checkboxValue : [],
+						textareaValue : 'some text here .....',
+					};
+				},
+
+				handRadio:function(e){
+					this.setState({
+						radioValue : e.target.value,
+					});
+				},
+
+				handCheckbox:function(e){
+					var checkValues = this.state.checkboxValue.slice();
+					var value = e.target.value;
+					var index = checkValues.indexOf(value);
+					if(index == -1){
+						checkValues.push(value);
+					}else{
+						checkValues.splice(index,1);
+					}
+					this.setState({
+						checkboxValue : checkValues,
+					});
+					
+				},
+
+				handleSubmit:function(e){
+					e.preventDefault(); //禁止表单的默认事件
+					console.log("form submitting...");
+					var formData = {
+						input : this.refs.goodInput.getDOMNode().value ,//React.findDOMNode(this.refs["goodInput"]).value  //this.refs["goodInput"].getDOMNode().value 
+						select : this.refs.goodSelect.getDOMNode().value ,
+						radio : this.state.radioValue,
+						checkbox : this.state.checkboxValue,
+						textarea : this.refs.goodTextarea.getDOMNode().value ,
+					};
+					this.refs.goodRadio.saySomething();
+					console.log("the form result is :");
+					console.log(formData);
+
+				},
+
+				render:function(){
+					return (
+						<form onSubmit={this.handleSubmit}>
+
+							<input type="text" defaultValue={this.state.inputValue} ref="goodInput"/>
+
+							{
+								/*ref也可以传递函数
+								function(comp){ React.findDOMNode(comp).focus()  聚焦
+
+								*/
+							}
+							<input type="text" defaultValue={this.state.inputValue} ref={ function(comp){ React.findDOMNode(comp).focus() }}/> 
+							
+							<br/><br/>
+
+							选项：
+							<select defaultValue={this.state.selectValue} ref="goodSelect">
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="C">C</option>
+								<option value="D">D</option>
+								<option value="E">E</option>
+							</select>
+							
+							<RadioButtons handleRadio = {this.handleRadio} ref="goodRadio"/>
+							
+							<CheckBoxButtons handCheckbox = {this.handCheckbox} ref="goodCheckbox"/>
+
+							<br/><br/>
+
+							<textarea defaultValue={this.state.textareaValue} ref="goodTextarea"></textarea>
+
+							<br/><br/>
+							<input type="submit" value="submit"/>
+						</form>
+					);
+				}
+
+			});
+
+			var RadioButtons = React.createClass({
+
+				saySomething :function(){
+					alert("hi");
+				},
+				render:function(){
+					return (						
+						<span>
+							<br/><br/>
+							单选：
+							RA<input onChange={this.props.handleRadio} type="radio" name="goodRadio" value="RA" defaultChecked/>
+							RB<input onChange={this.props.handleRadio} type="radio" name="goodRadio" value="RB" />
+							RC<input onChange={this.props.handleRadio} type="radio" name="goodRadio" value="RC" />
+						</span>
+					);
+				}
+			});
+
+			var CheckBoxButtons = React.createClass({
+				render:function(){
+					return (
+						<span>
+							<br/><br/>
+							多选：
+							CA<input onChange={this.props.handCheckbox} type="checkbox" name="goodCheckbox" value="CA" />
+							CB<input onChange={this.props.handCheckbox} type="checkbox" name="goodCheckbox" value="CB" />
+							CC<input onChange={this.props.handCheckbox} type="checkbox" name="goodCheckbox" value="CC" />
+						</span>
+					);
+				}
+			});
+
+			React.render(
+				<FormAction/>,
+				document.getElementById('app')
+			);
+
+		</script>
+
+
+	</body>
+</html>

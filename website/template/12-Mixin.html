@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <meta charset=utf-8>
+  <title>12-mixin</title>
+  <head>
+    <script src="../static/node_modules/react/dist/react.js"></script>
+    <script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+    var stateRecordMixin = {
+      componentWillMount :function(){
+        this.oldState = [];
+      },
+      componentWillUpdate : function(nextProp,nextState){
+        this.oldState.push(nextState);
+      },
+      //也可以定义自己的函数
+      previousState:function(){
+        var index = this.oldState.length - 1;
+        return index == -1 ? {} : this.oldState[index]; 
+      }
+    };
+
+    var MessageBox = React.createClass({
+
+      mixins:[stateRecordMixin],
+
+      getInitialState : function(){
+        return {
+          count : 0,
+        }
+      },
+
+      doUpdate:function(){
+        this.setState({
+          count : this.state.count+1,
+        });
+        console.log('zhu:'+this.state.count);
+      },
+      render:function(){
+        return (
+          <div>
+            <h1>计数：{this.state.count}</h1>
+            <button onClick={this.doUpdate}>跟新组件</button>
+            <SubMessage count={this.count}/>
+          </div>
+        );
+      }
+    });
+
+    var SubMessage = React.createClass({
+
+      mixins:[stateRecordMixin],
+
+      getInitialState : function(){
+        return {
+          count : 0,
+        }
+      },
+      componentWillReceiveProps:function(nextProp){
+        console.log(this.props.count);
+        this.setState({
+          count : this.props.count,
+        });
+      },
+      
+      render:function(){
+        return (
+          <div>
+            <h2>{this.state.count}</h2>
+          </div>
+        );
+      }
+    });
+
+    var messageBox = React.render(
+      <MessageBox/>,
+      document.getElementById('example'),
+      function(){
+        console.log('ok');
+      }
+    );
+
+
+    </script>
+  </body>
+</html>

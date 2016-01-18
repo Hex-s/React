@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <meta charset=utf-8>
+  <title>11-component-updating</title>
+  <head>
+    <script src="../static/node_modules/react/dist/react.js"></script>
+    <script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+    var MessageBox = React.createClass({
+  
+      getInitialState:function(){
+        return {
+          titleMessage:'hello(state)',
+          count : 0,
+        }
+      },
+
+      // componentWillMount:function(){
+      // },
+
+      // componentDidMount:function(){
+      // },
+
+      // componentWillUnmount:function(){
+      // },
+
+      // getDefaultProps:function(){
+      // },
+
+      shouldComponentUpdate:function(nextProp,nextState){
+        console.log('shouldComponentUpdate');
+        if(nextState.count > 10){
+          return false;
+        }
+        return true;
+      },
+      componentWillUpdate:function(nextProp,nextState){
+        console.log('componentWillUpdate');
+      },
+      componentDidUpdate:function(){
+        console.log('componentDidUpdate');
+      },
+      doUpdate:function(){
+        this.setState({
+          count : this.state.count+1,
+        });
+      },
+      render:function(){
+        return (
+          <div>
+            <h1>{this.state.titleMessage} 计数：{this.state.count}</h1>
+            <button onClick={this.doUpdate}>跟新组件</button>
+            <SubMessage count={this.state.count}/>
+          </div>
+        );
+      }
+    });
+
+    var SubMessage = React.createClass({
+      componentWillReceiveProps:function(){
+        console.log("子组件将要接收参数");
+      },
+      shouldComponentUpdate:function(nextProp,nextState){
+        if(nextProp.count > 5){
+          return false;
+        }
+        return true;
+      },
+      render:function(){
+        return (
+          <div>
+            <h2>{this.props.count}</h2>
+          </div>
+        );
+      }
+    });
+
+    var messageBox = React.render(
+      <MessageBox/>,
+      document.getElementById('example'),
+      function(){
+        console.log('ok');
+      }
+    );
+
+
+    </script>
+  </body>
+</html>

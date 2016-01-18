@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <meta charset=utf-8>
+  <title>1-react</title>
+  <head>
+    <script src="../static/node_modules/react/dist/react.js"></script>
+    <script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+    var MessageBox = React.createClass({
+      alertMe:function(){
+          alert('click');
+      },
+      render:function(){
+          return (
+            <h1 onClick={this.alertMe}>你好世界！！</h1>
+          );
+      },
+    });
+
+    React.render(
+      <MessageBox/>,
+      document.getElementById('example'),
+      function(){
+        console.log('ok');
+      }
+    );
+
+    </script>
+  </body>
+</html>

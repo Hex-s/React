@@ -1,0 +1,50 @@
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>6-events</title>
+		<script src="../static/node_modules/react/dist/react.js"></script>
+    	<script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  </head>
+
+	</head>
+	<body>
+		<div id="app"></div>
+		<script type="text/jsx">
+
+			var ClickApp = React.createClass({
+
+				getInitialState:function(){
+					return {
+						clickCount : 0,
+					};
+				},
+
+				handClick:function(e){
+					this.setState({
+						clickCount : this.state.clickCount + 1
+					});
+					console.log(e.target); //被封装的eventg
+					console.log(e.nativeEvent.screenX); //本地的event
+				},
+
+				render:function(){
+					return (
+						<div>
+							<h1>你好</h1>
+							<button onClick={this.handClick} >click</button>
+							<p>点了{this.state.clickCount}下</p>
+						</div>
+					)
+				}
+			});
+
+			React.render(
+				<ClickApp/>,
+				document.getElementById('app')
+			);
+
+		</script>
+
+
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPY HTML>
+<html>
+	<meta charset=utf-8>
+	<title>4-component-status2</title>
+	<head>
+		<script src="../static/node_modules/react/dist/react.js"></script>
+    	<script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+	</head>
+	<body>
+		<div id="example"></div>
+
+		<script type="text/jsx">
+			
+
+			var ClickBox = React.createClass({
+
+				getInitialState:function(){
+					return {
+						clickCount : 0,
+					}
+				},
+
+				handClick:function(){
+					//一定要用setState才能进行修改
+					//用state之后，还要进行forceUpdate
+					this.setState({
+						clickCount : this.state.clickCount + 1,
+					})
+				},
+				
+				render:function(){
+
+					return (
+						<div>
+							<h1>Hello World!</h1>
+							<button onClick={this.handClick}>点了我</button>
+							<p>{this.state.clickCount}下</p>
+						</div>
+					);
+				}
+			});
+
+			var clickAction = React.render(
+				<ClickBox/>,
+				document.getElementById('example')
+			);
+
+		</script>
+
+	</body>	
+</html>

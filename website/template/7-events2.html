@@ -1,0 +1,109 @@
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>7-events2</title>
+		<script src="../static/node_modules/react/dist/react.js"></script>
+   		<script src="../static/node_modules/react/dist/JSXTransformer.js"></script>
+  	</head>
+
+	</head>
+	<body>
+		<div id="app"></div>
+		<script type="text/jsx">
+
+			var FormAction = React.createClass({
+
+				getInitialState:function(){
+					return {
+						inputValue : 'default value',
+						selectValue : 'A',
+						radioValue : 'B',
+						textareaValue : 'some text here .....',
+					};
+				},
+
+				handleInput:function(e){
+					this.setState({
+						inputValue : e.target.value,
+					})
+				},
+				handleTextarea:function(e){
+					this.setState({
+						textareaValue : e.target.value,
+					})
+				},
+				handleSelect:function(e){
+					this.setState({
+						selectValue : e.target.value,
+					})
+				},
+
+				handleSubmit:function(e){
+					e.preventDefault(); //禁止表单的默认事件
+					console.log("form submitting...");
+					console.log(e);
+				},
+
+				render:function(){
+					return (
+						<form onSubmit={this.handleSubmit}>
+							<input type="text" value={this.state.inputValue} onChange={this.handleInput}/> 
+							{
+								/*input一定要有闭合的 '/'， 否则会报错
+								<input type="text" defaultValue="default value" > 
+								Uncaught Error: Parse Error: Line 30: Expected corresponding JSX closing tag for input*/
+							}
+							{
+								/*使用value，必须要提供相应的onchange方法，否则readonly，defaultValue可以不提供onchange方法
+
+								Warning: Failed propType: You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`. Check the render method of `FormAction`.
+								*/
+							}
+							<br/><br/>
+
+							<select value={this.state.selectValue} onChange={this.handleSelect}>
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="C">C</option>
+								<option value="D">D</option>
+								<option value="E">E</option>
+							</select>
+
+							<br/><br/>
+
+							<input type="radio" name="goodRadio" value="A" />
+							<input type="radio" name="goodRadio" value="B" defaultChecked/>
+							<input type="radio" name="goodRadio" value="C" />
+							{
+								/*使用 checked 的话，没有onchange,单选按钮不能改变选中的选项*/
+							  	
+							}
+
+							<br/><br/>
+
+							<input type="checkbox" name="goodCheckbox" value="A" />
+							<input type="checkbox" name="goodCheckbox" value="B" />
+							<input type="checkbox" name="goodCheckbox" value="C" defaultChecked/>
+
+							<br/><br/>
+
+							<textarea value={this.state.textareaValue} onChange={this.handleTextarea}></textarea>
+
+							<br/><br/>
+							<input type="submit" value="submit"/>
+						</form>
+					);
+				}
+
+			});
+
+			React.render(
+				<FormAction/>,
+				document.getElementById('app')
+			);
+
+		</script>
+
+
+	</body>
+</html>
